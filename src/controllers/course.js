@@ -54,4 +54,19 @@ const course = async (req, res) => {
   }
 };
 
-module.exports = { course }
+const getCourse = async (req, res) => {
+ try{
+     const result = await PostCourse.find({})
+     return res.json({ 
+      result:result,
+      status:"success"
+     })
+ }
+ catch(err){
+  console.log("Error in getting course controller", err);
+  return res.json({ msg: "Error in getting course controller",error:err });
+
+ }
+}
+
+module.exports = { course , getCourse }
