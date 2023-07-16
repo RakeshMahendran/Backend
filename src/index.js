@@ -13,8 +13,8 @@ const signupRoute = require("../src/routers/signup")
 const loginRoute = require("../src/routers/login")
 const courseRoute = require("../src/routers/course");
 
-app.use('/',signupRoute)
-app.use('/',loginRoute)
+app.use('/auth',signupRoute)
+app.use('/auth',loginRoute)
 app.use('/',courseRoute)
 
 connectDB()
