@@ -1,10 +1,10 @@
-const  express = require('express');
+const express = require("express");
 const router = express.Router();
-const dotenv = require('dotenv');
-const { SignUp } = require('../models/signupModel')
-const connectDB = require('../dbConnect')
-const bcrypt = require('bcrypt');
-dotenv.config()
+const dotenv = require("dotenv");
+const { SignUp } = require("../models/signupModel");
+const connectDB = require("../dbConnect");
+const bcrypt = require("bcrypt");
+dotenv.config();
 
 const signUp = async (req, res) => {
   try {
@@ -17,18 +17,27 @@ const signUp = async (req, res) => {
         message: "User with given email already exists",
       });
     }
-    const salt = await bcrypt.genSalt(Number(process.env.SALT));
-    const hashPassword = await bcrypt.hash(req.body.password, salt);
+    const saltRounds = Number(process.env.SALT);
+    const hashPassword = await bcrypt.hash(req.body.password, saltRounds);
 
     await new SignUp({ ...req.body, password: hashPassword }).save();
     res
       .status(201)
-      .json({ error: false, message: "Account created successfully" });
+      .json({
+        error: false,
+        message: "Account created successfully",
+        username: `${req.body.firstName} ${req.body.lastName}`,
+        email: req.body.email,
+      });
   } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: true, message: "Internal Server Error" });
+    console.log(err, "error  in signupCOntroller");
+    res
+      .status(500)
+      .json({
+        error: true,
+        message: "Internal Server Error due to signup controller",
+      });
   }
 };
-
 
 module.exports = { signUp };
